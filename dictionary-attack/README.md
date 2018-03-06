@@ -1,4 +1,4 @@
-### Instruction
+## Instruction
 #### Build
 - mvnw -DskipTests clean package
 #### Compile and Run
@@ -22,7 +22,7 @@
   - Contains words (possible passwords) for dictionary attack.
 #### Output file
 - **output.txt**: Created newly or appended.
-### Demo
+## Demo instruction
 #### Demo 1 - Run dictionary attack with English dictionary over 10 users
 - Run **mvnw -q clean compile exec:java -Dexec.mainClass=com.demo.Main**
 #### Demo 2 - Run dictionary attack with Bruteforce dictionary over 10 users sequentially
