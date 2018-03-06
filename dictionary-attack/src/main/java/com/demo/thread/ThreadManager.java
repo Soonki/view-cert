@@ -3,6 +3,7 @@ package com.demo.thread;
 import com.demo.attacktargetrepository.AttackTargetRepository;
 import com.demo.challenger.Challenger;
 import com.demo.dictionary.Dictionary;
+import com.demo.dictionary.BruteforcePermutationDictionary;
 import com.demo.dictionary.EnglishDictionary;
 import com.demo.entity.AttackTargetEntity;
 import com.demo.outputrepository.OutputRepository;
@@ -14,8 +15,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
-
-// import com.demo.dictionary.BruteforcePermutationDictionary;
 
 /**
  * Attacks all users in AttackTargetRepository in parallel.
