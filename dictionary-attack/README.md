@@ -2,9 +2,11 @@
 #### Java 7 or 8
 - Set up javac.exe in the PATH (assumes Windows).
 #### Build
-- mvnw -DskipTests clean package
+- git clone https://github.com/tayaee/security
+- cd security\dictionary-attack
+- build.bat
 #### Compile and Run
-- mvnw -q clean compile exec:java -Dexec.mainClass=com.demo.Main
+- run.bat
 #### Unit tests
 - mvnw clean test
 #### Input files
