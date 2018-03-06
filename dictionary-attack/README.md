@@ -1,4 +1,6 @@
 ## Instruction
+#### Java 7 or 8
+- Set up javac.exe in the PATH (assumes Windows).
 #### Build
 - mvnw -DskipTests clean package
 #### Compile and Run
