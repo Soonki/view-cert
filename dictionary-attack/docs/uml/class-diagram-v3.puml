@@ -1,0 +1,59 @@
+@startuml
+title Homework V3 Class Diagram
+
+' challengers
+interface com.demo.challenger.Challenger {
+    + boolean challenge(AttackTargetEntity, ChallengeEntity)
+}
+
+' dictionaries
+interface com.demo.dictionary.Dictionary {
+    + Iterator<ChallengeEntityy> iterator()
+}
+
+' targets
+interface com.demo.attacktargetrepository.AttackTargetRepository {
+    + Iterator<AttackTargetEntity> iterator()
+}
+
+' output repositories
+interface com.demo.outputrepository.OutputRepository {
+    + void write(OutputEntity)
+}
+
+' others
+interface java.lang.Runnable {
+    + void run()
+}
+class com.demo.thread.AttackTask {
+    + void run()
+}
+class com.demo.thread.ThreadManager {
+    + void start()
+    + void safeShutdown()
+}
+class com.demo.Main
+
+' relationship
+com.demo.Main ..> com.demo.thread.ThreadManager: depends
+com.demo.attacktargetrepository.AttackTargetRepository <|-- com.demo.attacktargetrepository.FileAttackTargetRepository: inherits
+com.demo.attacktargetrepository.AttackTargetRepository <|--- com.demo.attacktargetrepository.FacebookAttackTargetRepository: inherits
+com.demo.challenger.Challenger <|-- com.demo.challenger.Sha1OfflineChallenger: inherits
+com.demo.challenger.Challenger <|--- com.demo.challenger.FacebookOnlineChallenger: inherits
+com.demo.dictionary.Dictionary <|-- com.demo.dictionary.EnglishDictionary: inherits
+com.demo.dictionary.Dictionary <|--- com.demo.dictionary.BruteforcePermutationDictionary: inherits
+com.demo.outputrepository.OutputRepository <|-- com.demo.outputrepository.FileOutputRepository: inherits
+com.demo.outputrepository.OutputRepository <|--- com.demo.outputrepository.JdbcOutputRepository: inherits
+com.demo.thread.AttackTask ..> com.demo.attacktargetrepository.AttackTargetRepository: depends
+com.demo.thread.AttackTask ..> com.demo.challenger.Challenger: depends
+com.demo.thread.AttackTask ..> com.demo.dictionary.Dictionary: depends
+com.demo.thread.AttackTask ..> com.demo.outputrepository.OutputRepository: depends
+com.demo.thread.ThreadManager ..> com.demo.thread.AttackTask: depends
+java.lang.Runnable <|-- com.demo.thread.AttackTask: inherits
+com.demo.challenger.Challenger ....> ChallengeEntity: depends
+com.demo.challenger.Challenger ....> AttackTargetEntity: depends
+com.demo.dictionary.Dictionary ....> ChallengeEntity: depends
+com.demo.outputrepository.OutputRepository ....> OutputEntity: depends
+com.demo.attacktargetrepository.AttackTargetRepository ....> AttackTargetEntity: depends
+
+@enduml

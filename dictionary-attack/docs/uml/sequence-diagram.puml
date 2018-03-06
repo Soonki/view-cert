@@ -1,0 +1,73 @@
+@startuml
+title Homework Sequence Diagram
+autonumber
+skinparam maxmessagesize 80
+
+actor User as user
+participant Main as main <<Bean>>
+participant Spring as spring <<DI Container>>
+participant "FileAttackTargetRepository" as attacktargetrepository <<AttackTargetRepository>>
+participant "EnglishDictionary" as dict <<Dictionary>>
+participant "Sha1OfflineChallenger" as challenger <<Challenger>>
+participant ThreadManager as threadmanager <<Bean>>
+participant AttackTask as task <<Thread>>
+database "English\nDictionary" as englishdict <<File>>
+database "Input\nRepository" as input <<File>>
+database "Output\nRepository" as outputrepo <<File>>
+
+create main
+user -> main: run
+activate main
+
+create spring
+main -> spring: init
+activate spring
+
+create attacktargetrepository
+spring -> attacktargetrepository: create
+    activate attacktargetrepository
+    attacktargetrepository --\ input: get an iterator
+
+create dict
+spring -> dict: create
+    activate dict
+    dict --\ englishdict: get an iterator
+
+create challenger
+spring -> challenger: create
+    activate challenger
+
+create threadmanager
+spring -> threadmanager: create
+    activate threadmanager
+
+main -> threadmanager: start with attacktargetrepository, dictionary, challenger
+    loop OVER ALL ATTACK TARGET ENTITIES
+        threadmanager -> attacktargetrepository: get an attack target entity
+            attacktargetrepository -> input: get an attack target entity
+                input --> attacktargetrepository: an attack target entity
+            attacktargetrepository -> threadmanager: an attack target entity
+        create task
+        threadmanager -> task: create a thread for each attack target
+        activate task
+        loop OVER ALL WORDS IN DICTIONARY
+            task -> dict: get a plaintext word
+            dict --> task: a word
+            task -> challenger: challenge with the word against attack target entity
+            challenger --> task: boolean result
+            opt MATCHING
+                task -> outputrepo: save the attack target entity with the plaintext word
+            end if
+        end loop
+        deactivate task
+    end loop
+    threadmanager -> threadmanager: safe shut down
+    deactivate threadmanager
+
+main -> main: report elapsed time summary
+spring -> spring: destroy all beans
+deactivate spring
+deactivate dict
+deactivate attacktargetrepository
+deactivate challenger
+@enduml
