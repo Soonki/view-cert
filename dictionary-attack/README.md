@@ -33,4 +33,4 @@
 #### Demo 3 - Attack 10 users with Bruteforce dictionary in parallel
 - On top of the configuration for demo 2, edit src\main\resources\homework-default.properties to set thread-pool.size=10
 - Run **run.bat**
-- This takes about 9 seconds to finish with the same result as demo 2. Multithreading helps.
+- Expected result: This takes about 9 seconds to finish with the same result as demo 2. Multithreading helps.
