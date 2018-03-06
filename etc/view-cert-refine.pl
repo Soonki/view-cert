@@ -1,1 +1,0 @@
-print if /^Valid/ or /^Owner/ or /Subject:/ or /Not Before/ or /Not After/;
