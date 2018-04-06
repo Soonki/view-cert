@@ -2,7 +2,7 @@
 title Homework Use Case
 
 :User: as user
-(Run com.demo.Main) as (use)
+(Run com.demo.App) as (use)
 user --> (use)
 
 note right of (use)

@@ -32,10 +32,10 @@ class com.demo.thread.ThreadManager {
     + void start()
     + void safeShutdown()
 }
-class com.demo.Main
+class com.demo.App
 
 ' relationship
-com.demo.Main ..> com.demo.thread.ThreadManager: depends
+com.demo.App ..> com.demo.thread.ThreadManager: depends
 com.demo.thread.AttackTask .> com.demo.attacktargetrepository.AttackTargetRepository: depends
 com.demo.thread.AttackTask ..> com.demo.challenger.Challenger: depends
 com.demo.thread.AttackTask ..> com.demo.dictionary.Dictionary: depends

@@ -32,10 +32,10 @@ class com.demo.thread.ThreadManager {
     + void start()
     + void safeShutdown()
 }
-class com.demo.Main
+class com.demo.App
 
 ' relationship
-com.demo.Main ..> com.demo.thread.ThreadManager: depends
+com.demo.App ..> com.demo.thread.ThreadManager: depends
 com.demo.attacktargetrepository.AttackTargetRepository <|-- com.demo.attacktargetrepository.FileAttackTargetRepository: inherits
 com.demo.challenger.Challenger <|-- com.demo.challenger.Sha1OfflineChallenger: inherits
 com.demo.dictionary.Dictionary <|-- com.demo.dictionary.EnglishDictionary: inherits
