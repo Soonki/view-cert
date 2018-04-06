@@ -2,11 +2,12 @@ package com.demo.thread;
 
 import com.demo.attacktargetrepository.AttackTargetRepository;
 import com.demo.challenger.Challenger;
-import com.demo.dictionary.Dictionary;
 import com.demo.dictionary.BruteforcePermutationDictionary;
+import com.demo.dictionary.Dictionary;
 import com.demo.dictionary.EnglishDictionary;
 import com.demo.entity.AttackTargetEntity;
 import com.demo.outputrepository.OutputRepository;
+import com.demo.util.CliOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ThreadManager {
     private final AttackTargetRepository attackTargetRepository;
     private final OutputRepository outputRepository;
     private final Challenger challenger;
+
+    CliOptions cliOptions = CliOptions.getInstance();
 
     @Value("${bruteforce-permutation-dictionary.min-len}")
     Integer minLen;
@@ -49,11 +52,19 @@ public class ThreadManager {
 
     public void start(ThreadPoolTaskExecutor taskExecutor) {
         taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+        Integer numThreads = cliOptions.getNumThreads();
+        if (numThreads != 1) {
+            taskExecutor.setCorePoolSize(numThreads);
+        }
         Iterator<AttackTargetEntity> it = attackTargetRepository.iterator();
         while (it.hasNext()) {
             AttackTargetEntity entry = it.next();
-            // Dictionary dictionary = new BruteforcePermutationDictionary(minLen, maxLen, allowedCharacters);
-            Dictionary dictionary = new EnglishDictionary(englishDictionaryFileName);
+            Dictionary dictionary;
+            if ("bruteforce".equals(cliOptions.getDictionaryType())) {
+                dictionary = new BruteforcePermutationDictionary(minLen, maxLen, allowedCharacters);
+            } else {
+                dictionary = new EnglishDictionary(englishDictionaryFileName);
+            }
             taskExecutor.execute(new AttackTask(entry, challenger, dictionary, outputRepository));
         }
         safeShutdown(taskExecutor);

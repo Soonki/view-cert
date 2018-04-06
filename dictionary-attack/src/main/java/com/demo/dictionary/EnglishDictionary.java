@@ -1,6 +1,7 @@
 package com.demo.dictionary;
 
 import com.demo.entity.ChallengeEntity;
+import com.demo.util.CliOptions;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.util.Iterator;
 @Component
 public class EnglishDictionary implements Dictionary {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnglishDictionary.class);
+    private String fileName;
     private LineIterator it;
 
     public EnglishDictionary(LineIterator it) {
@@ -27,17 +29,26 @@ public class EnglishDictionary implements Dictionary {
 
     @Autowired
     public EnglishDictionary(@Value("${english-dictionary.filename}") String fileName) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(fileName).getFile());
-        try {
-            it = FileUtils.lineIterator(file);
-        } catch (IOException e) {
-            LOGGER.error("Error loading dictionary", e);
-        }
+        this.fileName = fileName;
     }
 
     @Override
     public Iterator<ChallengeEntity> iterator() {
+
+        try {
+            if (it == null) {
+                CliOptions cliOptions = CliOptions.getInstance();
+                File file = new File(cliOptions.getEnglishDictionaryFileName());
+                if (file.exists()) {
+            it = FileUtils.lineIterator(file);
+                } else {
+                    it = FileUtils.lineIterator(getFileFromClasspath(fileName));
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error loading dictionary", e);
+        }
+
         return new Iterator<ChallengeEntity>() {
             @Override
             public boolean hasNext() {
@@ -54,5 +65,10 @@ public class EnglishDictionary implements Dictionary {
                 // no use
             }
         };
+    }
+
+    private File getFileFromClasspath(String fileName) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        return new File(classLoader.getResource(fileName).getFile());
     }
 }

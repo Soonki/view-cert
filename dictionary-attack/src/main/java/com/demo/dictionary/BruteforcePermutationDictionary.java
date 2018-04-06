@@ -1,6 +1,7 @@
 package com.demo.dictionary;
 
 import com.demo.entity.ChallengeEntity;
+import com.demo.util.CliOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,24 @@ public class BruteforcePermutationDictionary implements Dictionary {
             @Value("${bruteforce-permutation-dictionary.min-len}") int minLen,
             @Value("${bruteforce-permutation-dictionary.max-len}") int maxLen,
             @Value("${bruteforce-permutation-dictionary.allowed-characters}") String allowedCharacters) {
+
+        CliOptions cliOptions = CliOptions.getInstance();
+
+        // override 3
+        Integer cliMinLen = cliOptions.getMinLen();
+        if (cliMinLen != null)
+            minLen = cliMinLen;
+
+        // override 6
+        Integer cliMaxLen = cliOptions.getMaxLen();
+        if (cliMaxLen != null)
+            maxLen = cliMaxLen;
+        
+        // override abcdefghijkl
+        String cliAllowedCharacters = cliOptions.getAllowedCharacters();
+        if (cliAllowedCharacters != null)
+            allowedCharacters = cliAllowedCharacters;
+
         this.maxLen = maxLen;
         this.allowedCharactersArray = allowedCharacters.toCharArray();
         this.indexArray = new int[maxLen];

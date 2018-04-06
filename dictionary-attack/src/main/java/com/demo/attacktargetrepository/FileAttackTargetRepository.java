@@ -1,6 +1,7 @@
 package com.demo.attacktargetrepository;
 
 import com.demo.entity.AttackTargetEntity;
+import com.demo.util.CliOptions;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,27 @@ import java.util.Iterator;
  */
 @Component
 public class FileAttackTargetRepository implements AttackTargetRepository {
-
+    private String fileName;
     private LineIterator it;
 
     @Autowired
     public FileAttackTargetRepository(@Value("${file-input-scanner.filename}") String fileName) throws IOException {
-        this.it = FileUtils.lineIterator(getFileFromClasspath(fileName), "UTF-8");
+        this.fileName = fileName;
     }
 
     @Override
     public Iterator<AttackTargetEntity> iterator() {
+        try {
+            CliOptions cliOptions = CliOptions.getInstance();
+            File cliFile = new File(cliOptions.getInputFileName());
+            if (cliFile.exists()) {
+                it = FileUtils.lineIterator(cliFile);
+            } else {
+                it = FileUtils.lineIterator(getFileFromClasspath(fileName));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new Iterator<AttackTargetEntity>() {
 
             @Override
