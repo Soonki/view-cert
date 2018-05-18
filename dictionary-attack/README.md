@@ -36,3 +36,9 @@
 #### Demo 3 - Attack 10 users with Bruteforce dictionary in parallel
 - Run: **cli.bat -i users.txt -o demo3.txt -t bruteforce -m 2 -M 6 -C abcdefghijkl -n 10**
 - Expected result: This takes about 9 seconds to finish with the same result as demo 2. Multithreading helps.
+
+one
+
+two
+
+three
